@@ -46,7 +46,7 @@
 
 #define CASCADE_PATH ".\\cascade\\"
 #define SPEED_NUN_PATH "speed_num_image"
-#define LOAD_PATH "C:\\Users\\vision\\Desktop\\SelfDriving\\DB\\test_image\\no_straight"
+#define LOAD_PATH "D:\\Users\\VisionWork\\Desktop\\¹ÚÇÏ¿¬\\DB\\child_protection"
 #define LOAD_NAME "child_protect_"
 
 

@@ -6,8 +6,11 @@
 #include <sstream>
 #include <istream>
 
-#define LABEL_PATH "D:\\Hayeon\\Projects\\YOLODataRefiner\\YOLODataRefiner\\Labels"
-#define IMAGE_PATH "C:\\Users\\vision\\Desktop\\SelfDriving\\DB\\Hyundai\\DataSet_목동\\000159.jpg"
+using namespace std;
+using namespace cv;
+
+#define LABEL_PATH "Labels"
+#define IMAGE_PATH "D:\\Users\\VisionWork\\Desktop\\박하연\\DB\\child_protection"
 #define TRAIN_PATH "data\\img\\train.txt"
 
 #define SPEED					0

@@ -1,10 +1,12 @@
 #include "YOLODataRefiner.h"
+#include <fstream>
+#include <sstream>
 
-YOLODataRefiner::YOLODataRefiner(string _screen_name, int _button_state, int _label_state)
+YOLODataRefiner::YOLODataRefiner(string _screen_name, string path, int _button_state, int _label_state)
 	: screen_name(_screen_name), button_state(_button_state), label_state(_label_state), data_idx(0), data_num(0)
 {	
 	// File list load
-	ifstream in(TRAIN_PATH);
+	ifstream in(path);
 	string input_s;
 
 	while (!in.eof()) {
@@ -605,12 +607,35 @@ void YOLODataRefiner::CallBackFunc(int event, int x, int y, int flags, void* use
 				
 			}
 		}
+		else {
+			vector<string> data;
+
+			ifstream in_stream(refiner->txt_list[refiner->data_idx]);
+			string input;
+
+			while (!in_stream.eof()) {
+				getline(in_stream, input);
+				data.push_back(input);
+			}
+			in_stream.close();
+
+			ofstream out_stream(refiner->txt_list[refiner->data_idx]);
+			for (int idx = 0; idx < data.size(); idx++) {
+				stringstream ss(data[idx]);
+				int label;
+				ss >> label;
+				if(label == refiner->label_state)
+					out_stream << data[idx] << endl;
+				continue;
+			}
+			out_stream.close();
+		}
 		refiner->select = Candidate();
 	}
 	
 }
 
-void YOLODataRefiner::drawScreen(Mat _src) {
+void YOLODataRefiner::drawScreen() {
 	src = imread(img_list[data_idx]);
 	if (src.rows > screen_height || src.cols > screen_width)
 		resize(src, src, Size(1000, src.rows * 1000 / src.cols));

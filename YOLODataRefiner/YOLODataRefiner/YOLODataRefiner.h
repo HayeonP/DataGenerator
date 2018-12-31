@@ -9,11 +9,6 @@ struct Candidate {
 	int line_num;
 };
 
-//struct Select {
-//	Rect location = Rect();
-//	int line_num = -1;
-//};
-
 struct Move{
 	Rect location = Rect();
 	Candidate select = Candidate();
@@ -21,9 +16,9 @@ struct Move{
 
 class YOLODataRefiner {
 public:
-	YOLODataRefiner(string _screen_name, int _button_state, int _label_state);
+	YOLODataRefiner(string _screen_name, string path,int _button_state, int _label_state);
 	static void CallBackFunc(int event, int x, int y, int flags, void* userdata);
-	void drawScreen(Mat src);
+	void drawScreen();
 private:
 	int button_state;
 	int label_state;

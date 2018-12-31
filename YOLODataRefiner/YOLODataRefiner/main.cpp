@@ -13,17 +13,11 @@ int main() {
 
 
 
-	YOLODataRefiner _YOLODataRefiner("Screen", MOVE, ALL);
-
-	Mat src = imread(IMAGE_PATH);
-
+	YOLODataRefiner _YOLODataRefiner("Screen", TRAIN_PATH, MOVE, ALL);
+	
 	while (1) {
-		_YOLODataRefiner.drawScreen(src);
+		_YOLODataRefiner.drawScreen();
 	}
-
-
-	
-	
 
 	return 0;
 }

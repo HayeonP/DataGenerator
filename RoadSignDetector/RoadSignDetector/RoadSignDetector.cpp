@@ -101,22 +101,20 @@ Mat RoadSignDetector::RoadSignDetect(Mat& src, string filename)
 	autowb(src, src);
 	Mat src_gray = Mat(src.size(), 8, 1);
 	cv::cvtColor(src, src_gray, CV_BGR2GRAY);
-
 	// Make Candidates
 	Mat hist;
 	equalizeHist(src_gray, hist);
 	for (int i = 0; i < ROADSIGN_NUM; i++) {
 		createCandidate(src, hist, i);
 	}
-
 	// Filtering
-	for (int i = 0; i < ROADSIGN_NUM; i++) {
+	for (int i = 1; i < ROADSIGN_NUM; i++) {
 		Mat src_temp = src.clone();
 		Mat gray_temp = src_gray.clone();
+		cout << _RoadSignNames[i] << endl;
 		_RoadSignFilter[i](src_temp, gray_temp);
 		//show_filtered_candidates(src_temp, i);
 	}
-
 	// Create txt file
 	vector<string> data;
 	
@@ -124,7 +122,6 @@ Mat RoadSignDetector::RoadSignDetect(Mat& src, string filename)
 		for (auto it = _FilteredRoadSignLocations[i].begin(); it != _FilteredRoadSignLocations[i].end(); ++it)
 			data.push_back( normalize_location(src, i, (*it)) );
 	}
-
 	// Create datalist file
 	string data_name;
 	istringstream ss(filename);
@@ -135,14 +132,12 @@ Mat RoadSignDetector::RoadSignDetect(Mat& src, string filename)
 	string txt_path = LOAD_PATH + string("\\") + filename;
 	write_file(txt_path, data);
 	
-	
-
 	_RoadSignLocations.clear();
 	_FilteredRoadSignLocations.clear();
 	_NoFilteredCandidates.clear();
 	_FilteredCandidates.clear();
 	
-
+	cout << "done!" << endl;
 	return src;
 }
 
@@ -286,8 +281,12 @@ int RoadSignDetector::_Speed_Filter(Mat src, Mat grey) {
 
 	int nnum = 0;
 
-	IplImage* _src = &IplImage(src);
-	IplImage* _box= &IplImage(grey);
+	IplImage temp1 = src;
+	IplImage temp2 = grey;
+
+
+	IplImage* _src;
+	IplImage* _box = cvCloneImage(&(IplImage)grey);
 	int num = _RoadSignLocations[SPEED].size();
 	vector<Rect> Temp = _RoadSignLocations[SPEED];
 	int speed;
