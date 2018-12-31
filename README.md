@@ -16,3 +16,7 @@ CascadeDataExpander
 Diversify the training data for cascade classifying by change the brightness.
 
 
+SaveFixedFpsVideoFrames
+-----------------------
+Save video frames at fixed fps.
+
