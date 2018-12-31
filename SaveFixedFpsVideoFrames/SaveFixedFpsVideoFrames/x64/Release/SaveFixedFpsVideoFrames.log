@@ -1,0 +1,6 @@
+﻿  main.cpp
+d:\users\visionwork\desktop\박하연\projects\trainingdatagenerator\savefixedfpsvideoframes\savefixedfpsvideoframes\main.cpp(50): warning C4244: '인수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  코드를 생성하고 있습니다.
+  All 636 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  코드를 생성했습니다.
+  SaveFixedFpsVideoFrames.vcxproj -> D:\Users\VisionWork\Desktop\박하연\Projects\TrainingDataGenerator\SaveFixedFpsVideoFrames\x64\Release\SaveFixedFpsVideoFrames.exe
