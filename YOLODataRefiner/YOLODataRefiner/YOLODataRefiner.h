@@ -30,6 +30,8 @@ private:
 	int data_idx;
 	int data_num;
 
+	int current_idx;
+
 	string screen_name;
 	Mat src, screen;
 	vector<Mat> label_images;

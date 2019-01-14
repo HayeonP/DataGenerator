@@ -3,11 +3,14 @@
 #include <sstream>
 
 YOLODataRefiner::YOLODataRefiner(string _screen_name, string path, int _button_state, int _label_state)
-	: screen_name(_screen_name), button_state(_button_state), label_state(_label_state), data_idx(0), data_num(0)
-{	
+	: screen_name(_screen_name), button_state(_button_state), label_state(_label_state), data_idx(START_IDX), data_num(0)
+{
+
 	// File list load
 	ifstream in(path);
 	string input_s;
+
+	current_idx = 0;
 
 	while (!in.eof()) {
 		getline(in, input_s);
@@ -20,6 +23,7 @@ YOLODataRefiner::YOLODataRefiner(string _screen_name, string path, int _button_s
 		data_num++;
 	}
 	in.close();
+	data_num -= 2;
 
 	// Setup
 	namedWindow(_screen_name);
@@ -39,7 +43,7 @@ YOLODataRefiner::YOLODataRefiner(string _screen_name, string path, int _button_s
 	button_locations.push_back(erase);
 	button_locations.push_back(create);
 	button_locations.push_back(cancel);
-
+	cout << "!!" << endl;
 	// LABELS
 	int button_lastY = button_height * 4 + 10 * 3;
 
@@ -751,6 +755,7 @@ void YOLODataRefiner::drawScreen() {
 
 	putText(screen, "Mode  : " + button_names[button_state], Point(screen_width - 320, screen_height - 50), 1, 1.5, Scalar(0, 0, 255));
 	putText(screen, "Label : " + label_names[label_state], Point(screen_width - 320, screen_height - 30), 1, 1.5, Scalar(0,0,255));
+	putText(screen, to_string(data_idx+1) + "/" + to_string(data_num), Point(10, screen_height - 10), 1, 1.5, Scalar(0, 0, 255));
 
 	moveWindow(screen_name, 0, 0);
 	imshow(screen_name, screen);

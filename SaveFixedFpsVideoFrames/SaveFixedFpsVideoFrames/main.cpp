@@ -8,8 +8,8 @@
 using namespace std;
 using namespace cv;
 
-#define SAVE_PATH	"D:\\Users\\VisionWork\\Desktop\\박하연\\DB\\SquenceImage"
-#define VIDEO_PATH	"D:\\Users\\VisionWork\\Desktop\\박하연\\DB\\BlackBox\\bsh-181226\\Road_Video"
+#define SAVE_PATH	"D:\\Users\\VisionWork\\Desktop\\박하연\\DB\\SequenceImage\\190103_2"
+#define VIDEO_PATH	"D:\\Users\\VisionWork\\Desktop\\박하연\\DB\\BlackBox\\190103_2"
 #define TARGET_FPS	1
 
 vector<string> get_filepaths_in_directory(string path);
@@ -50,7 +50,8 @@ int main() {
 				waitKey(1000 / fps_origin);
 				if (skip_count == fps_origin / TARGET_FPS) {
 					imshow("video", frame);
-					imwrite(SAVE_PATH + string("\\") + filename + "_" + to_string(save_count) + string(".jpg"), frame);
+					cout << SAVE_PATH + string("\\") + filename + "_" + to_string(save_count) + string(".jpg") << endl;
+					cout<<imwrite(SAVE_PATH + string("\\") + filename + "_" + to_string(save_count) + string(".jpg"), frame)<<endl;
 					skip_count = 0;
 					save_count++;
 				}

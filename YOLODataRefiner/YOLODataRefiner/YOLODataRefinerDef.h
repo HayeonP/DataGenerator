@@ -10,7 +10,7 @@ using namespace std;
 using namespace cv;
 
 #define LABEL_PATH "Labels"
-#define IMAGE_PATH "D:\\Users\\VisionWork\\Desktop\\¹ÚÇÏ¿¬\\DB\\child_protection"
+#define IMAGE_PATH "data\\img"
 #define TRAIN_PATH "data\\img\\train.txt"
 
 #define SPEED					0
@@ -34,3 +34,4 @@ using namespace cv;
 #define CREATE				2
 #define CANCEL				3
 
+#define START_IDX			0

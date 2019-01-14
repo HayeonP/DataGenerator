@@ -9,10 +9,6 @@
 
 int main() {
 	
-
-
-
-
 	YOLODataRefiner _YOLODataRefiner("Screen", TRAIN_PATH, MOVE, ALL);
 	
 	while (1) {
