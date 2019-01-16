@@ -5,7 +5,7 @@
 YOLODataRefiner::YOLODataRefiner(string _screen_name, string path, int _button_state, int _label_state)
 	: screen_name(_screen_name), button_state(_button_state), label_state(_label_state), data_idx(START_IDX), data_num(0)
 {
-
+	
 	// File list load
 	ifstream in(path);
 	string input_s;
@@ -22,6 +22,7 @@ YOLODataRefiner::YOLODataRefiner(string _screen_name, string path, int _button_s
 
 		data_num++;
 	}
+	cout << "1" << endl;
 	in.close();
 	data_num -= 2;
 
@@ -30,20 +31,19 @@ YOLODataRefiner::YOLODataRefiner(string _screen_name, string path, int _button_s
 	setMouseCallback(screen_name, CallBackFunc, this);
 	move_flag = false;
 
-	screen_width = 1650, screen_height = 950, label_size = 70;
-
+	screen_width = 1650, screen_height = 1000, label_size = 70;
+	cout << "2" << endl;
 	// BUTTONS
 	button_height = 100, button_width = 200;
 
 	Rect move = Rect(Point(screen_width - button_width, 0), Point(screen_width, button_height));
 	Rect erase = Rect(Point(screen_width - button_width, button_height + 10), Point(screen_width, button_height * 2 + 10));
 	Rect create = Rect(Point(screen_width - button_width, button_height * 2 + 10 * 2), Point(screen_width, button_height * 3 + 10 * 2));
-	Rect cancel = Rect(Point(screen_width - button_width, button_height * 3 + 10 * 3), Point(screen_width, button_height * 4 + 10 * 3));
+	Rect quit = Rect(Point(screen_width - button_width, button_height * 3 + 10 * 3), Point(screen_width, button_height * 4 + 10 * 3));
 	button_locations.push_back(move);
 	button_locations.push_back(erase);
 	button_locations.push_back(create);
-	button_locations.push_back(cancel);
-	cout << "!!" << endl;
+	button_locations.push_back(quit);
 	// LABELS
 	int button_lastY = button_height * 4 + 10 * 3;
 
@@ -55,16 +55,16 @@ YOLODataRefiner::YOLODataRefiner(string _screen_name, string path, int _button_s
 
 	for (int i = 0; i < LABEL_NUM; i++) {
 		Rect label_location;
-		int label_row = i / 3;
-		int label_col = i % 3;
+		int label_row = i / 4;
+		int label_col = i % 4;
 		label_location = Rect(
-			screen_width - (3 - label_col) * label_size, button_lastY + label_row * label_size + 10,
+			screen_width - (4 - label_col) * label_size, button_lastY + label_row * label_size + 10,
 			label_size, label_size);
 		label_locations.push_back(label_location);
 	}
-
+	cout << "3" << endl;
 	// Label & Button names
-	label_names.push_back("Speed");
+	label_names.push_back("Speed other");
 	label_names.push_back("Child Protect");
 	label_names.push_back("No Left");
 	label_names.push_back("No Right");
@@ -77,12 +77,21 @@ YOLODataRefiner::YOLODataRefiner(string _screen_name, string path, int _button_s
 	label_names.push_back("Unprotected Left");
 	label_names.push_back("Uturn");
 	label_names.push_back("No Straight");
+	label_names.push_back("Speed 20");
+	label_names.push_back("Speed 30");
+	label_names.push_back("Speed 40");
+	label_names.push_back("Speed 50");
+	label_names.push_back("Speed 60");
+	label_names.push_back("Speed 70");
+	label_names.push_back("Speed 80");
+	label_names.push_back("Speed 90");
+	label_names.push_back("Speed 100");
 	label_names.push_back("ALL");
 
 	button_names.push_back("Move");
 	button_names.push_back("Erase");
 	button_names.push_back("Create");
-	button_names.push_back("Cancel");
+	button_names.push_back("Quit");
 
 	colors.push_back(Scalar(0, 0, 255));
 	colors.push_back(Scalar(0, 255, 0));
@@ -97,6 +106,16 @@ YOLODataRefiner::YOLODataRefiner(string _screen_name, string path, int _button_s
 	colors.push_back(Scalar(87, 103, 102));
 	colors.push_back(Scalar(179, 102, 154));
 	colors.push_back(Scalar(29, 60, 109));
+	colors.push_back(Scalar(80, 10, 65));
+	colors.push_back(Scalar(225, 150, 9));
+	colors.push_back(Scalar(200, 92, 109));
+	colors.push_back(Scalar(51, 151, 251));
+	colors.push_back(Scalar(251, 151, 51));
+	colors.push_back(Scalar(151, 251, 109));
+	colors.push_back(Scalar(68, 68, 68));
+	colors.push_back(Scalar(99, 99, 200));
+	colors.push_back(Scalar(0, 0, 0));
+	cout << "4" << endl;
 }
 
 void YOLODataRefiner::CallBackFunc(int event, int x, int y, int flags, void* userdata) {
@@ -148,13 +167,13 @@ void YOLODataRefiner::CallBackFunc(int event, int x, int y, int flags, void* use
 			return;
 		}
 
-		// CANCEL BUTTON
-		else if ((x > refiner->button_locations[CANCEL].x) &&
-			(x < refiner->button_locations[CANCEL].x + refiner->button_width) &&
-			(y > refiner->button_locations[CANCEL].y) &&
-			(y < refiner->button_locations[CANCEL].y + refiner->button_height)) {
+		// QUIT BUTTON
+		else if ((x > refiner->button_locations[QUIT].x) &&
+			(x < refiner->button_locations[QUIT].x + refiner->button_width) &&
+			(y > refiner->button_locations[QUIT].y) &&
+			(y < refiner->button_locations[QUIT].y + refiner->button_height)) {
 
-			refiner->button_state = CANCEL;
+			refiner->button_state = QUIT;
 			refiner->select = Candidate();
 			refiner->move_flag = false;
 			refiner->create_flag = false;
@@ -333,12 +352,12 @@ void YOLODataRefiner::CallBackFunc(int event, int x, int y, int flags, void* use
 
 			return;
 		}
-		else if ((x > refiner->label_locations[SPEED].x) &&
-			(x < refiner->label_locations[SPEED].x + refiner->label_size) &&
-			(y > refiner->label_locations[SPEED].y) &&
-			(y < refiner->label_locations[SPEED].y + refiner->label_size)) {
+		else if ((x > refiner->label_locations[SPEED_OTHER].x) &&
+			(x < refiner->label_locations[SPEED_OTHER].x + refiner->label_size) &&
+			(y > refiner->label_locations[SPEED_OTHER].y) &&
+			(y < refiner->label_locations[SPEED_OTHER].y + refiner->label_size)) {
 
-			refiner->label_state = SPEED;
+			refiner->label_state = SPEED_OTHER;
 			refiner->select = Candidate();
 			refiner->move_flag = false;
 			refiner->create_flag = false;
@@ -346,6 +365,146 @@ void YOLODataRefiner::CallBackFunc(int event, int x, int y, int flags, void* use
 			refiner->create_2 = Point();
 
 			return;
+		}
+		else if ((x > refiner->label_locations[SPEED_20].x) &&
+		(x < refiner->label_locations[SPEED_20].x + refiner->label_size) &&
+		(y > refiner->label_locations[SPEED_20].y) &&
+		(y < refiner->label_locations[SPEED_20].y + refiner->label_size)) {
+
+		refiner->label_state = SPEED_20;
+		refiner->select = Candidate();
+		refiner->move_flag = false;
+		refiner->create_flag = false;
+		refiner->create_1 = Point();
+		refiner->create_2 = Point();
+
+		return;
+		}
+		else if ((x > refiner->label_locations[SPEED_30].x) &&
+		(x < refiner->label_locations[SPEED_30].x + refiner->label_size) &&
+		(y > refiner->label_locations[SPEED_30].y) &&
+		(y < refiner->label_locations[SPEED_30].y + refiner->label_size)) {
+
+		refiner->label_state = SPEED_30;
+		refiner->select = Candidate();
+		refiner->move_flag = false;
+		refiner->create_flag = false;
+		refiner->create_1 = Point();
+		refiner->create_2 = Point();
+
+		return;
+		}
+		else if ((x > refiner->label_locations[SPEED_40].x) &&
+		(x < refiner->label_locations[SPEED_40].x + refiner->label_size) &&
+		(y > refiner->label_locations[SPEED_40].y) &&
+		(y < refiner->label_locations[SPEED_40].y + refiner->label_size)) {
+
+		refiner->label_state = SPEED_40;
+		refiner->select = Candidate();
+		refiner->move_flag = false;
+		refiner->create_flag = false;
+		refiner->create_1 = Point();
+		refiner->create_2 = Point();
+
+		return;
+		}
+		else if ((x > refiner->label_locations[SPEED_50].x) &&
+		(x < refiner->label_locations[SPEED_50].x + refiner->label_size) &&
+		(y > refiner->label_locations[SPEED_50].y) &&
+		(y < refiner->label_locations[SPEED_50].y + refiner->label_size)) {
+
+		refiner->label_state = SPEED_50;
+		refiner->select = Candidate();
+		refiner->move_flag = false;
+		refiner->create_flag = false;
+		refiner->create_1 = Point();
+		refiner->create_2 = Point();
+
+		return;
+		}
+		else if ((x > refiner->label_locations[SPEED_60].x) &&
+		(x < refiner->label_locations[SPEED_60].x + refiner->label_size) &&
+		(y > refiner->label_locations[SPEED_60].y) &&
+		(y < refiner->label_locations[SPEED_60].y + refiner->label_size)) {
+
+		refiner->label_state = SPEED_60;
+		refiner->select = Candidate();
+		refiner->move_flag = false;
+		refiner->create_flag = false;
+		refiner->create_1 = Point();
+		refiner->create_2 = Point();
+
+		return;
+		}
+		else if ((x > refiner->label_locations[SPEED_70].x) &&
+		(x < refiner->label_locations[SPEED_70].x + refiner->label_size) &&
+		(y > refiner->label_locations[SPEED_70].y) &&
+		(y < refiner->label_locations[SPEED_70].y + refiner->label_size)) {
+
+		refiner->label_state = SPEED_70;
+		refiner->select = Candidate();
+		refiner->move_flag = false;
+		refiner->create_flag = false;
+		refiner->create_1 = Point();
+		refiner->create_2 = Point();
+
+		return;
+		}
+		else if ((x > refiner->label_locations[SPEED_70].x) &&
+		(x < refiner->label_locations[SPEED_70].x + refiner->label_size) &&
+		(y > refiner->label_locations[SPEED_70].y) &&
+		(y < refiner->label_locations[SPEED_70].y + refiner->label_size)) {
+
+		refiner->label_state = SPEED_70;
+		refiner->select = Candidate();
+		refiner->move_flag = false;
+		refiner->create_flag = false;
+		refiner->create_1 = Point();
+		refiner->create_2 = Point();
+
+		return;
+		}
+		else if ((x > refiner->label_locations[SPEED_80].x) &&
+		(x < refiner->label_locations[SPEED_80].x + refiner->label_size) &&
+		(y > refiner->label_locations[SPEED_80].y) &&
+		(y < refiner->label_locations[SPEED_80].y + refiner->label_size)) {
+
+		refiner->label_state = SPEED_80;
+		refiner->select = Candidate();
+		refiner->move_flag = false;
+		refiner->create_flag = false;
+		refiner->create_1 = Point();
+		refiner->create_2 = Point();
+
+		return;
+		}
+		else if ((x > refiner->label_locations[SPEED_90].x) &&
+		(x < refiner->label_locations[SPEED_90].x + refiner->label_size) &&
+		(y > refiner->label_locations[SPEED_90].y) &&
+		(y < refiner->label_locations[SPEED_90].y + refiner->label_size)) {
+
+		refiner->label_state = SPEED_90;
+		refiner->select = Candidate();
+		refiner->move_flag = false;
+		refiner->create_flag = false;
+		refiner->create_1 = Point();
+		refiner->create_2 = Point();
+
+		return;
+		}
+		else if ((x > refiner->label_locations[SPEED_100].x) &&
+		(x < refiner->label_locations[SPEED_100].x + refiner->label_size) &&
+		(y > refiner->label_locations[SPEED_100].y) &&
+		(y < refiner->label_locations[SPEED_100].y + refiner->label_size)) {
+
+		refiner->label_state = SPEED_100;
+		refiner->select = Candidate();
+		refiner->move_flag = false;
+		refiner->create_flag = false;
+		refiner->create_1 = Point();
+		refiner->create_2 = Point();
+
+		return;
 		}
 		else if ((x > refiner->label_locations[ALL].x) &&
 			(x < refiner->label_locations[ALL].x + refiner->label_size) &&
@@ -536,7 +695,7 @@ void YOLODataRefiner::CallBackFunc(int event, int x, int y, int flags, void* use
 							else if (refiner->button_state == CREATE) {
 
 							}
-							else if (refiner->button_state == CANCEL) {
+							else if (refiner->button_state == QUIT) {
 								//
 							}
 
@@ -585,7 +744,7 @@ void YOLODataRefiner::CallBackFunc(int event, int x, int y, int flags, void* use
 						else if (refiner->button_state == CREATE) {
 
 						}
-						else if (refiner->button_state == CANCEL) {
+						else if (refiner->button_state == QUIT) {
 							//
 						}
 
@@ -685,20 +844,20 @@ void YOLODataRefiner::drawScreen() {
 	rectangle(screen, button_locations[MOVE], Scalar(255, 255, 255), -1);
 	rectangle(screen, button_locations[ERASE], Scalar(255, 255, 255), -1);
 	rectangle(screen, button_locations[CREATE], Scalar(255, 255, 255), -1);
-	rectangle(screen, button_locations[CANCEL], Scalar(255, 255, 255), -1);
+	rectangle(screen, button_locations[QUIT], Scalar(255, 255, 255), -1);
 
 	putText(screen, "Move", Point(button_locations[MOVE].x + 25, button_locations[MOVE].y + 60), 2, 1.5, Scalar(0, 0, 255));
 	putText(screen, "Erase", Point(button_locations[ERASE].x + 25, button_locations[ERASE].y + 60), 2, 1.5, Scalar(0, 0, 255));
 	putText(screen, "Create", Point(button_locations[CREATE].x + 25, button_locations[CREATE].y + 60), 2, 1.5, Scalar(0, 0, 255));
-	putText(screen, "Quit", Point(button_locations[CANCEL].x + 25, button_locations[CANCEL].y + 60), 2, 1.5, Scalar(0, 0, 255));
+	putText(screen, "Quit", Point(button_locations[QUIT].x + 25, button_locations[QUIT].y + 60), 2, 1.5, Scalar(0, 0, 255));
 	
 	// Draw labels
 	int button_lastY = button_height * 4 + 10 * 3;
 	for (int i = 0; i < LABEL_NUM; i++) {
-		int label_row = i / 3;
-		int label_col = i % 3;
+		int label_row = i / 4;
+		int label_col = i % 4;
 		if (i == ALL) {
-			Rect location = Rect(screen_width - (3 - label_col) * label_size, button_lastY + label_row * label_size + 10, label_size, label_size);
+			Rect location = Rect(screen_width - (4 - label_col) * label_size, button_lastY + label_row * label_size + 10, label_size, label_size);
 			rectangle(screen, location, Scalar(255, 255, 255), -1);
 			putText(screen, "ALL", Point(location.x+ 5, location.y + 48), 2, 1, Scalar(0, 0, 255), 2);
 		}
@@ -708,13 +867,13 @@ void YOLODataRefiner::drawScreen() {
 		rectangle(screen, label_locations[i], Scalar(0, 0, 0), 7);
 	}
 
-	// Next & Prev
-	prev_location = Rect(screen_width - 3 * label_size, button_lastY + 5 * label_size + 10, label_size, label_size);
+	//// Next & Prev
+	prev_location = Rect(screen_width - 4 * label_size, button_lastY + 6 * label_size + 10, label_size, label_size);
 	rectangle(screen, prev_location, Scalar(255, 255, 255), -1);
 	putText(screen, "Prev", Point(prev_location.x + 4, prev_location.y + 46), 2, 0.8, Scalar(0, 0, 255), 2);
 	rectangle(screen, prev_location, Scalar(0, 0, 0), 7);
 
-	next_location = Rect(screen_width - 2 * label_size, button_lastY + 5 * label_size + 10, label_size, label_size);
+	next_location = Rect(screen_width - 3 * label_size, button_lastY + 6 * label_size + 10, label_size, label_size);
 	rectangle(screen, next_location, Scalar(255, 255, 255), -1);
 	putText(screen, "Next", Point(next_location.x + 4, next_location.y * 1 + 46), 2, 0.8, Scalar(0, 0, 255), 2);
 	rectangle(screen, next_location, Scalar(0, 0, 0), 7);
@@ -724,12 +883,14 @@ void YOLODataRefiner::drawScreen() {
 		for (int i = 0; i < LABEL_NUM; i++) {
 			for (auto it = candidates[i].begin(); it != candidates[i].end(); ++it) {
 				rectangle(screen, (*it).location, colors[i], 2);
+				putText(screen, label_names[i], Point((*it).location.x - 5, (*it).location.y - 5), 1, 2, colors[i], 3);
 			}
 		}
 	}
 	else {
 		for (auto it = candidates[label_state].begin(); it != candidates[label_state].end(); ++it) {
 			rectangle(screen, (*it).location, colors[label_state], 2);
+			putText(screen, label_names[label_state], Point((*it).location.x - 5, (*it).location.y - 5), 1, 2, colors[label_state], 3);
 		}
 	}
 
@@ -759,7 +920,60 @@ void YOLODataRefiner::drawScreen() {
 
 	moveWindow(screen_name, 0, 0);
 	imshow(screen_name, screen);
-	waitKey(10);
+	int key = waitKey(10);
+	// SPACE :: NEXT
+	if (key == 32) {
+		move_flag = false;
+		create_flag = false;
+		create_1 = Point();
+		create_2 = Point();
+
+		if ((data_idx + 1) >= data_num) {
+			cout << "cannot go next!" << endl;
+		}
+		else{
+			label_state = ALL;
+			data_idx++;
+			select = Candidate();
+		}
+	} 
+	// Z :: LEFT
+	else if (key == 122 || key == 90) {
+		move_flag = false;
+		create_flag = false;
+		create_1 = Point();
+		create_2 = Point();
+
+		if (data_idx == 0) {
+			cout << "cannot go prev!" << endl;
+		}
+		else {
+			label_state = ALL;
+			data_idx--;
+			select = Candidate();
+		}
+	}
+	// A :: selecet label All
+	else if (key == 65 || key == 97) {
+		label_state = ALL;
+	}
+	// E :: select button Erase
+	else if (key == 69 || key == 101) {
+		button_state = ERASE;
+	}
+	// C :: select button create
+	else if (key == 67 || key == 99) {
+		button_state = CREATE;
+	}
+	// M :: select button create
+	else if (key == 77 || key == 109) {
+		button_state = MOVE;
+	}
+	// ESC :: QUIT
+	else if (key == 27) {
+		exit(0);
+	}
+
 
 	for (int i = 0; i < LABEL_NUM; i++) {
 		candidates[i].clear();

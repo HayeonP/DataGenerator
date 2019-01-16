@@ -1,3 +1,3 @@
 # YOLODataGenerator
 
-SaveFixedFpsVideoFrames + RoadsignDetector
+SaveFixedFpsVideoFrames + Create empty {image}.txt and train.txt

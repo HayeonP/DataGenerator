@@ -8,8 +8,7 @@
 
 
 int main() {
-	
-	YOLODataRefiner _YOLODataRefiner("Screen", TRAIN_PATH, MOVE, ALL);
+	YOLODataRefiner _YOLODataRefiner("Screen", TRAIN_PATH, CREATE, ALL);
 	
 	while (1) {
 		_YOLODataRefiner.drawScreen();
