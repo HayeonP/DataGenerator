@@ -1,5 +1,0 @@
-﻿  main.cpp
-d:\users\visionwork\desktop\박하연\projects\yolodatanumchecker\yolodatanumchecker\main.cpp(47): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-d:\users\visionwork\desktop\박하연\projects\yolodatanumchecker\yolodatanumchecker\main.cpp(68): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-d:\users\visionwork\desktop\박하연\projects\yolodatanumchecker\yolodatanumchecker\main.cpp(82): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-  YOLODataNumChecker.vcxproj -> D:\Users\VisionWork\Desktop\박하연\Projects\YOLODataNumChecker\Debug\YOLODataNumChecker.exe

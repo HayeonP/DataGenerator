@@ -1,4 +1,0 @@
-data/img/5.jpg
-data/img/6.jpg
-data/img/7.jpg
-data/img/8.jpg
