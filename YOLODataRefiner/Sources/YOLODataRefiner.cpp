@@ -2,8 +2,8 @@
 #include <fstream>
 #include <sstream>
 
-YOLODataRefiner::YOLODataRefiner(string _screen_name, string path, int _button_state, int _label_state)
-	: screen_name(_screen_name), button_state(_button_state), label_state(_label_state), data_idx(START_IDX), data_num(0)
+YOLODataRefiner::YOLODataRefiner(string _screen_name, string path, int _button_state, int _default_state)
+	: screen_name(_screen_name), button_state(_button_state), label_state(_default_state), data_idx(START_IDX), data_num(0), default_state(_default_state)
 {
 	// File list load
 	ifstream in(path);
@@ -21,7 +21,8 @@ YOLODataRefiner::YOLODataRefiner(string _screen_name, string path, int _button_s
 		data_num++;
 	}
 	in.close();
-	data_num -= 2;
+	data_num -= 1;
+
 	// Setup
 	namedWindow(_screen_name);
 	setMouseCallback(screen_name, CallBackFunc, this);
@@ -39,6 +40,7 @@ YOLODataRefiner::YOLODataRefiner(string _screen_name, string path, int _button_s
 	button_locations.push_back(erase);
 	button_locations.push_back(create);
 	button_locations.push_back(quit);
+
 	// LABELS
 	int button_lastY = button_height * 4 + 10 * 3;
 
@@ -528,7 +530,7 @@ void YOLODataRefiner::CallBackFunc(int event, int x, int y, int flags, void* use
 				return;
 			}
 
-			refiner->label_state = ALL;
+			refiner->label_state = refiner->default_state;
 			refiner->data_idx--;
 			refiner->select = Candidate();
 			return;
@@ -548,7 +550,7 @@ void YOLODataRefiner::CallBackFunc(int event, int x, int y, int flags, void* use
 				return;
 			}
 
-			refiner->label_state = ALL;
+			refiner->label_state = refiner->default_state;
 			refiner->data_idx++;
 			refiner->select = Candidate();
 			return;
@@ -793,11 +795,10 @@ void YOLODataRefiner::CallBackFunc(int event, int x, int y, int flags, void* use
 
 void YOLODataRefiner::drawScreen() {
 	src = imread(img_list[data_idx]);
+	
 	if (src.rows > screen_height || src.cols > screen_width)
 		resize(src, src, Size(1000, src.rows * 1000 / src.cols));
 	screen = Mat(screen_height, screen_width, CV_8UC3, Scalar(0, 0, 0));
-	cout << src.cols << " " << src.rows << endl;
-	cout << screen.cols << " " << screen.rows << endl;
 	src.copyTo(screen(Rect(0,0,src.cols, src.rows)));
 	ifstream in(txt_list[data_idx]);
 	string input_s;
@@ -908,10 +909,11 @@ void YOLODataRefiner::drawScreen() {
 
 	putText(screen, "Mode  : " + button_names[button_state], Point(screen_width - 320, screen_height - 50), 1, 1.5, Scalar(0, 0, 255));
 	putText(screen, "Label : " + label_names[label_state], Point(screen_width - 320, screen_height - 30), 1, 1.5, Scalar(0,0,255));
-	putText(screen, to_string(data_idx+1) + "/" + to_string(data_num), Point(10, screen_height - 10), 1, 1.5, Scalar(0, 0, 255));
+	putText(screen, to_string(data_idx+1) + "/" + to_string(data_num), Point(10, screen_height - 20), 1, 1.5, Scalar(0, 0, 255));
 
 	moveWindow(screen_name, 0, 0);
 	imshow(screen_name, screen);
+
 	int key = waitKey(10);
 	// SPACE :: NEXT
 	if (key == 32) {
@@ -924,7 +926,7 @@ void YOLODataRefiner::drawScreen() {
 			cout << "cannot go next!" << endl;
 		}
 		else{
-			label_state = ALL;
+			label_state = default_state;
 			data_idx++;
 			select = Candidate();
 		}
@@ -940,7 +942,7 @@ void YOLODataRefiner::drawScreen() {
 			cout << "cannot go prev!" << endl;
 		}
 		else {
-			label_state = ALL;
+			label_state = default_state;
 			data_idx--;
 			select = Candidate();
 		}

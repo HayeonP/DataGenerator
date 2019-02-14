@@ -16,7 +16,7 @@ struct Move{
 
 class YOLODataRefiner {
 public:
-	YOLODataRefiner(string _screen_name, string path,int _button_state, int _label_state);
+	YOLODataRefiner(string _screen_name, string path,int _button_state, int _default_state);
 	static void CallBackFunc(int event, int x, int y, int flags, void* userdata);
 	void drawScreen();
 private:
@@ -29,6 +29,7 @@ private:
 	int label_size;
 	int data_idx;
 	int data_num;
+	int default_state;
 
 	int current_idx;
 
