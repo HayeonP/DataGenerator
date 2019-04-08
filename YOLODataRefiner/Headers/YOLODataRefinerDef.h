@@ -35,8 +35,9 @@ using namespace cv;
 #define SPEED_80				19
 #define SPEED_90				20
 #define SPEED_100				21
-#define ALL						22
-#define LABEL_NUM				23
+#define TRAFFIC_SIGN			22
+#define ALL						23
+#define LABEL_NUM				24
 
 #define MOVE				0
 #define ERASE				1

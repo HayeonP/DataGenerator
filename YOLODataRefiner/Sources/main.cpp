@@ -8,7 +8,7 @@
 
 
 int main() {
-	YOLODataRefiner _YOLODataRefiner("Screen", TRAIN_PATH, CREATE, SPEED_70);
+	YOLODataRefiner _YOLODataRefiner("Screen", TRAIN_PATH, CREATE, TRAFFIC_SIGN);
 	
 	while (1) {
 		_YOLODataRefiner.drawScreen();

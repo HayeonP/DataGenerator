@@ -5,6 +5,7 @@
 YOLODataRefiner::YOLODataRefiner(string _screen_name, string path, int _button_state, int _default_state)
 	: screen_name(_screen_name), button_state(_button_state), label_state(_default_state), data_idx(START_IDX), data_num(0), default_state(_default_state)
 {
+	cout << data_idx << endl;
 	// File list load
 	ifstream in(path);
 	string input_s;
@@ -82,6 +83,7 @@ YOLODataRefiner::YOLODataRefiner(string _screen_name, string path, int _button_s
 	label_names.push_back("Speed 80");
 	label_names.push_back("Speed 90");
 	label_names.push_back("Speed 100");
+	label_names.push_back("Traffic Sign");
 	label_names.push_back("ALL");
 
 	button_names.push_back("Move");
@@ -110,6 +112,7 @@ YOLODataRefiner::YOLODataRefiner(string _screen_name, string path, int _button_s
 	colors.push_back(Scalar(151, 251, 109));
 	colors.push_back(Scalar(68, 68, 68));
 	colors.push_back(Scalar(99, 99, 200));
+	colors.push_back(Scalar(51, 200, 137));
 	colors.push_back(Scalar(0, 0, 0));
 }
 
@@ -493,6 +496,20 @@ void YOLODataRefiner::CallBackFunc(int event, int x, int y, int flags, void* use
 		(y < refiner->label_locations[SPEED_100].y + refiner->label_size)) {
 
 		refiner->label_state = SPEED_100;
+		refiner->select = Candidate();
+		refiner->move_flag = false;
+		refiner->create_flag = false;
+		refiner->create_1 = Point();
+		refiner->create_2 = Point();
+
+		return;
+		}
+		else if ((x > refiner->label_locations[TRAFFIC_SIGN].x) &&
+		(x < refiner->label_locations[TRAFFIC_SIGN].x + refiner->label_size) &&
+		(y > refiner->label_locations[TRAFFIC_SIGN].y) &&
+		(y < refiner->label_locations[TRAFFIC_SIGN].y + refiner->label_size)) {
+
+		refiner->label_state = TRAFFIC_SIGN;
 		refiner->select = Candidate();
 		refiner->move_flag = false;
 		refiner->create_flag = false;
