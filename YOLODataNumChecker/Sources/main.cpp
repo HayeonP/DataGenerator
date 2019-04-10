@@ -7,11 +7,11 @@
 using namespace std;
 
 //#define PATH "D:\\Users\\VisionWork\\Desktop\\박하연\\Projects\\TrainingDataGenerator\\YOLODataRefiner\\YOLODataRefiner\\data\\img"
-#define PATH "D:\\Users\\VisionWork\\Desktop\\박하연\\DB\\final"
-#define TOTAL 1
+#define PATH "D:\\Users\\VisionWork\\Desktop\\박하연\\DB\\final\\a"
+#define TOTAL 0
 
 int main() {
-	vector<int> label_num(23);
+	vector<int> label_num(24);
 	vector<string> label_names;
 
 	label_names.push_back("Speed OTher");
@@ -36,6 +36,7 @@ int main() {
 	label_names.push_back("Speed 80");
 	label_names.push_back("Speed 90");
 	label_names.push_back("Speed 100");
+	label_names.push_back("Traffic Sign");
 	label_names.push_back("ALL");
 
 	int a = 0;
@@ -49,7 +50,7 @@ int main() {
 
 		stringstream ss_1(dirname);
 		while (getline(ss_1, filename_1, '\\'));
-		if((filename_1.find("19") == std::string::npos)) continue;
+		//if((filename_1.find("19") == std::string::npos)) continue;
 
 		ifstream in_stream(trainname);
 		string input;
