@@ -57,7 +57,7 @@ int main(int argc, char** argv) {
 			is = istringstream(path_node.back());
 			string file_lastname;
 			getline(is, file_lastname, '.');
-			string path = "data/img/" + add_string + "/" + file_lastname + "jpg";
+			string path = "data/img/" + add_string + "/" + file_lastname + ".jpg";
 			temp_data.txt_path = path;
 			// Add label num
 			for (auto it = node_data.begin(); it != node_data.end(); ++it) {				
